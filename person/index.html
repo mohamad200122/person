@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Personal demo blog for a Flutter mobile developer.">
+	<meta property="og:title" content="Flutter Dev Blog - Demo">
+	<meta property="og:description" content="A simple personal blog website to test free hosting deployment.">
+	<meta property="og:type" content="website">
+	<title>Flutter Dev Blog | Demo</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #f3f7f4;
+			--surface: #ffffff;
+			--surface-alt: #e8f4ef;
+			--text: #11221d;
+			--muted: #4d635a;
+			--primary: #0ea56f;
+			--primary-strong: #0a7d54;
+			--line: #d1e3db;
+			--shadow: 0 20px 40px rgba(7, 37, 27, 0.12);
+			--radius-lg: 22px;
+			--radius-md: 14px;
+			--max-w: 1080px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Almarai", "Segoe UI", Tahoma, sans-serif;
+			background:
+				radial-gradient(circle at 85% 10%, #d6fff0 0%, rgba(214, 255, 240, 0) 38%),
+				radial-gradient(circle at 12% 82%, #dcf3ff 0%, rgba(220, 243, 255, 0) 36%),
+				var(--bg);
+			color: var(--text);
+			min-height: 100vh;
+			line-height: 1.6;
+		}
+
+		.blob {
+			position: fixed;
+			border-radius: 50%;
+			z-index: -1;
+			filter: blur(1px);
+			opacity: 0.7;
+		}
+
+		.blob-a {
+			width: 300px;
+			height: 300px;
+			top: -80px;
+			right: -60px;
+			background: linear-gradient(150deg, #72e2b0, #b2ffe0);
+		}
+
+		.blob-b {
+			width: 220px;
+			height: 220px;
+			bottom: 40px;
+			left: -40px;
+			background: linear-gradient(160deg, #7dc8ff, #bbecff);
+		}
+
+		.container {
+			width: min(100% - 2rem, var(--max-w));
+			margin-inline: auto;
+		}
+
+		.topbar {
+			position: sticky;
+			top: 0;
+			backdrop-filter: blur(8px);
+			background: rgba(243, 247, 244, 0.88);
+			border-bottom: 1px solid var(--line);
+			z-index: 10;
+		}
+
+		.topbar-inner {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0.85rem 0;
+			gap: 1rem;
+		}
+
+		.brand {
+			font-family: "Space Grotesk", "Segoe UI", sans-serif;
+			font-weight: 700;
+			letter-spacing: 0.4px;
+			color: var(--text);
+			text-decoration: none;
+			font-size: 1.05rem;
+		}
+
+		.nav {
+			display: flex;
+			gap: 0.9rem;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		.nav a {
+			color: var(--muted);
+			text-decoration: none;
+			font-size: 0.95rem;
+			transition: color 0.2s ease;
+		}
+
+		.nav a:hover,
+		.nav a:focus-visible {
+			color: var(--primary-strong);
+		}
+
+		.lang-switch {
+			border: 1px solid var(--line);
+			background: var(--surface);
+			border-radius: 999px;
+			padding: 0.45rem 0.85rem;
+			font-family: "Space Grotesk", "Segoe UI", sans-serif;
+			font-weight: 700;
+			font-size: 0.85rem;
+			cursor: pointer;
+			color: var(--text);
+		}
+
+		main {
+			padding: 2.1rem 0 3rem;
+		}
+
+		.hero {
+			display: grid;
+			grid-template-columns: 1.1fr 0.9fr;
+			gap: 1.4rem;
+			align-items: stretch;
+			margin-bottom: 1.6rem;
+		}
+
+		.hero-card,
+		.stats-card,
+		.section,
+		.blog-card,
+		.project-card,
+		.contact-card {
+			background: var(--surface);
+			border: 1px solid var(--line);
+			border-radius: var(--radius-lg);
+			box-shadow: var(--shadow);
+		}
+
+		.hero-card {
+			padding: 1.7rem;
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			background: var(--surface-alt);
+			border-radius: 999px;
+			padding: 0.25rem 0.65rem;
+			color: var(--primary-strong);
+			font-weight: 700;
+			font-size: 0.85rem;
+		}
+
+		h1 {
+			margin: 0.8rem 0 0.45rem;
+			font-size: clamp(1.7rem, 4vw, 2.7rem);
+			line-height: 1.2;
+		}
+
+		.subtitle {
+			margin: 0;
+			color: var(--muted);
+			font-size: 1.02rem;
+			max-width: 52ch;
+		}
+
+		.hero-actions {
+			margin-top: 1.1rem;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.4rem;
+			text-decoration: none;
+			border-radius: 999px;
+			padding: 0.68rem 1.1rem;
+			font-weight: 700;
+			transition: transform 0.2s ease, background 0.2s ease;
+			border: 1px solid transparent;
+		}
+
+		.btn:hover,
+		.btn:focus-visible {
+			transform: translateY(-2px);
+		}
+
+		.btn-primary {
+			background: var(--primary);
+			color: #ffffff;
+		}
+
+		.btn-primary:hover,
+		.btn-primary:focus-visible {
+			background: var(--primary-strong);
+		}
+
+		.btn-soft {
+			background: var(--surface-alt);
+			color: var(--primary-strong);
+			border-color: #cae9dc;
+		}
+
+		.stats-card {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 0.65rem;
+			padding: 1.2rem;
+		}
+
+		.metric {
+			border-radius: var(--radius-md);
+			border: 1px solid var(--line);
+			background: #f8fffc;
+			padding: 0.9rem;
+		}
+
+		.metric strong {
+			display: block;
+			font-family: "Space Grotesk", "Segoe UI", sans-serif;
+			font-size: 1.35rem;
+			line-height: 1;
+			margin-bottom: 0.35rem;
+		}
+
+		.grid {
+			display: grid;
+			gap: 1rem;
+		}
+
+		.section {
+			padding: 1.3rem;
+			margin-bottom: 1rem;
+		}
+
+		h2 {
+			margin: 0 0 0.55rem;
+			font-size: 1.35rem;
+		}
+
+		.section-intro {
+			margin: 0 0 1rem;
+			color: var(--muted);
+		}
+
+		.chips {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.55rem;
+		}
+
+		.chip {
+			padding: 0.4rem 0.7rem;
+			border-radius: 999px;
+			background: #f2faf6;
+			border: 1px solid #d4eadf;
+			color: #1b5e45;
+			font-size: 0.88rem;
+			font-weight: 700;
+		}
+
+		.projects,
+		.blogs {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0.9rem;
+		}
+
+		.project-card,
+		.blog-card {
+			padding: 1rem;
+			transition: transform 0.2s ease;
+		}
+
+		.project-card:hover,
+		.blog-card:hover {
+			transform: translateY(-4px);
+		}
+
+		.card-tag {
+			display: inline-flex;
+			padding: 0.22rem 0.5rem;
+			border-radius: 999px;
+			font-size: 0.75rem;
+			font-weight: 700;
+			margin-bottom: 0.55rem;
+			color: #0e5e41;
+			background: #ebfbf3;
+			border: 1px solid #c8ebda;
+		}
+
+		.project-card h3,
+		.blog-card h3 {
+			margin: 0.15rem 0 0.45rem;
+			font-size: 1.03rem;
+			line-height: 1.35;
+		}
+
+		.project-card p,
+		.blog-card p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 0.93rem;
+		}
+
+		.contact-card {
+			padding: 1.2rem;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.7rem;
+		}
+
+		.footer {
+			text-align: center;
+			color: var(--muted);
+			font-size: 0.86rem;
+			padding: 0.7rem 0 2rem;
+		}
+
+		.reveal {
+			opacity: 0;
+			transform: translateY(16px);
+			animation: revealUp 0.7s ease forwards;
+		}
+
+		.delay-1 { animation-delay: 0.05s; }
+		.delay-2 { animation-delay: 0.12s; }
+		.delay-3 { animation-delay: 0.18s; }
+
+		@keyframes revealUp {
+			from {
+				opacity: 0;
+				transform: translateY(16px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@media (max-width: 940px) {
+			.hero {
+				grid-template-columns: 1fr;
+			}
+
+			.projects,
+			.blogs {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+
+		@media (max-width: 640px) {
+			.topbar-inner {
+				flex-wrap: wrap;
+			}
+
+			.nav {
+				order: 3;
+				width: 100%;
+			}
+
+			.projects,
+			.blogs {
+				grid-template-columns: 1fr;
+			}
+
+			.hero-card,
+			.section,
+			.stats-card,
+			.contact-card {
+				border-radius: 16px;
+			}
+
+			main {
+				padding-top: 1.4rem;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="blob blob-a" aria-hidden="true"></div>
+	<div class="blob blob-b" aria-hidden="true"></div>
+
+	<header class="topbar">
+		<div class="container topbar-inner">
+			<a class="brand" href="#top">Flutter Notebook</a>
+			<nav class="nav" aria-label="Main Navigation">
+				<a href="#about" data-i18n="nav.about">نبذة</a>
+				<a href="#skills" data-i18n="nav.skills">المهارات</a>
+				<a href="#projects" data-i18n="nav.projects">المشاريع</a>
+				<a href="#blog" data-i18n="nav.blog">المدونة</a>
+				<a href="#contact" data-i18n="nav.contact">تواصل</a>
+			</nav>
+			<button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language">AR | EN</button>
+		</div>
+	</header>
+
+	<main id="top" class="container">
+		<section class="hero reveal">
+			<article class="hero-card">
+				<span class="eyebrow" data-i18n="hero.eyebrow">مدونة شخصية تجريبية</span>
+				<h1 data-i18n="hero.title">مرحبًا، أنا مطور تطبيقات Flutter</h1>
+				<p class="subtitle" data-i18n="hero.subtitle">أبني تطبيقات موبايل سريعة وقابلة للتوسعة باستخدام Flutter وDart. هذه نسخة تجريبية كاملة لاختبار النشر على استضافة مجانية.</p>
+				<div class="hero-actions">
+					<a class="btn btn-primary" href="#blog" data-i18n="hero.primary">اقرأ آخر التدوينات</a>
+					<a class="btn btn-soft" href="#projects" data-i18n="hero.secondary">استعرض المشاريع</a>
+				</div>
+			</article>
+			<aside class="stats-card delay-1 reveal" aria-label="Profile Highlights">
+				<div class="metric">
+					<strong>3+</strong>
+					<span data-i18n="stats.apps">تطبيقات تجريبية</span>
+				</div>
+				<div class="metric">
+					<strong>Flutter</strong>
+					<span data-i18n="stats.stack">التركيز التقني</span>
+				</div>
+				<div class="metric">
+					<strong data-i18n="stats.roleValue">mobile devloper</strong>
+					<span data-i18n="stats.roleLabel">المسمى الحالي</span>
+				</div>
+			</aside>
+		</section>
+
+		<section id="about" class="section reveal delay-1">
+			<h2 data-i18n="about.title">نبذة سريعة</h2>
+			<p class="section-intro" data-i18n="about.text">أشارك هنا تجاربي في بناء واجهات Flutter، إدارة الحالة، وتحسين الأداء. الهدف من هذا الموقع هو تقديم بروفايل شخصي بسيط قابل للنشر مباشرة.</p>
+		</section>
+
+		<section id="skills" class="section reveal delay-1">
+			<h2 data-i18n="skills.title">المهارات الأساسية</h2>
+			<p class="section-intro" data-i18n="skills.intro">تقنيات أستخدمها بشكل متكرر في مشاريع الموبايل:</p>
+			<div class="chips" aria-label="Skills list">
+				<span class="chip">Flutter</span>
+				<span class="chip">Dart</span>
+				<span class="chip">Firebase</span>
+				<span class="chip">REST APIs</span>
+				<span class="chip">State Management</span>
+				<span class="chip">Responsive UI</span>
+			</div>
+		</section>
+
+		<section id="projects" class="section reveal delay-2">
+			<h2 data-i18n="projects.title">مشاريع مختصرة</h2>
+			<p class="section-intro" data-i18n="projects.intro">نماذج أعمال تجريبية يمكنك تطويرها لاحقًا إلى صفحات مفصلة.</p>
+			<div class="projects">
+				<article class="project-card">
+					<span class="card-tag" data-i18n="projects.card1.tag">تطبيق إنتاجية</span>
+					<h3 data-i18n="projects.card1.title">Task Bloom</h3>
+					<p data-i18n="projects.card1.text">تطبيق مهام مع تنبيهات ذكية ولوحة إحصائيات أسبوعية.</p>
+				</article>
+				<article class="project-card">
+					<span class="card-tag" data-i18n="projects.card2.tag">تطبيق متجر</span>
+					<h3 data-i18n="projects.card2.title">Mini Cart</h3>
+					<p data-i18n="projects.card2.text">واجهة متجر موبايل مع فلترة منتجات وتجربة دفع تجريبية.</p>
+				</article>
+				<article class="project-card">
+					<span class="card-tag" data-i18n="projects.card3.tag">تطبيق محتوى</span>
+					<h3 data-i18n="projects.card3.title">ReadFlow</h3>
+					<p data-i18n="projects.card3.text">قارئ مقالات بسيط يدعم الوضع الليلي وحفظ المفضلة.</p>
+				</article>
+			</div>
+		</section>
+
+		<section id="blog" class="section reveal delay-2">
+			<h2 data-i18n="blog.title">تدوينات تجريبية</h2>
+			<p class="section-intro" data-i18n="blog.intro">محتوى تجريبي لعرض شكل المدونة قبل ربطها بنظام حقيقي.</p>
+			<div class="blogs">
+				<article class="blog-card">
+					<span class="card-tag" data-i18n="blog.card1.tag">Flutter Basics</span>
+					<h3 data-i18n="blog.card1.title">كيف تبدأ مشروع Flutter نظيف</h3>
+					<p data-i18n="blog.card1.text">خطوات عملية لبناء هيكل مشروع واضح من أول يوم.</p>
+				</article>
+				<article class="blog-card">
+					<span class="card-tag" data-i18n="blog.card2.tag">Performance</span>
+					<h3 data-i18n="blog.card2.title">تقنيات تسريع واجهات Flutter</h3>
+					<p data-i18n="blog.card2.text">طرق تقليل إعادة البناء وتحسين سلاسة الرسوم المتحركة.</p>
+				</article>
+				<article class="blog-card">
+					<span class="card-tag" data-i18n="blog.card3.tag">Architecture</span>
+					<h3 data-i18n="blog.card3.title">اختيار إدارة الحالة المناسبة</h3>
+					<p data-i18n="blog.card3.text">مقارنة مبسطة بين أشهر الخيارات ومتى تستخدم كل واحد.</p>
+				</article>
+			</div>
+		</section>
+
+		<section id="contact" class="section reveal delay-3">
+			<h2 data-i18n="contact.title">تواصل</h2>
+			<p class="section-intro" data-i18n="contact.intro">ضع روابطك الحقيقية هنا قبل النشر النهائي.</p>
+			<div class="contact-card">
+				<a class="btn btn-soft" href="https://github.com/" target="_blank" rel="noopener" data-i18n="contact.github">GitHub</a>
+				<a class="btn btn-soft" href="https://www.linkedin.com/" target="_blank" rel="noopener" data-i18n="contact.linkedin">LinkedIn</a>
+				<a class="btn btn-soft" href="mailto:yourname@example.com" data-i18n="contact.email">Email</a>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<p data-i18n="footer.copy">Demo portfolio blog for free hosting test - 2026</p>
+	</footer>
+
+	<script>
+		const strings = {
+			ar: {
+				"nav.about": "نبذة",
+				"nav.skills": "المهارات",
+				"nav.projects": "المشاريع",
+				"nav.blog": "المدونة",
+				"nav.contact": "تواصل",
+				"hero.eyebrow": "مدونة شخصية تجريبية",
+				"hero.title": "مرحبًا، أنا مطور تطبيقات Flutter",
+				"hero.subtitle": "أبني تطبيقات موبايل سريعة وقابلة للتوسعة باستخدام Flutter وDart. هذه نسخة تجريبية كاملة لاختبار النشر على استضافة مجانية.",
+				"hero.primary": "اقرأ آخر التدوينات",
+				"hero.secondary": "استعرض المشاريع",
+				"stats.apps": "تطبيقات تجريبية",
+				"stats.stack": "التركيز التقني",
+				"stats.roleValue": "mobile devloper",
+				"stats.roleLabel": "المسمى الحالي",
+				"about.title": "نبذة سريعة",
+				"about.text": "أشارك هنا تجاربي في بناء واجهات Flutter، إدارة الحالة، وتحسين الأداء. الهدف من هذا الموقع هو تقديم بروفايل شخصي بسيط قابل للنشر مباشرة.",
+				"skills.title": "المهارات الأساسية",
+				"skills.intro": "تقنيات أستخدمها بشكل متكرر في مشاريع الموبايل:",
+				"projects.title": "مشاريع مختصرة",
+				"projects.intro": "نماذج أعمال تجريبية يمكنك تطويرها لاحقًا إلى صفحات مفصلة.",
+				"projects.card1.tag": "تطبيق إنتاجية",
+				"projects.card1.title": "Task Bloom",
+				"projects.card1.text": "تطبيق مهام مع تنبيهات ذكية ولوحة إحصائيات أسبوعية.",
+				"projects.card2.tag": "تطبيق متجر",
+				"projects.card2.title": "Mini Cart",
+				"projects.card2.text": "واجهة متجر موبايل مع فلترة منتجات وتجربة دفع تجريبية.",
+				"projects.card3.tag": "تطبيق محتوى",
+				"projects.card3.title": "ReadFlow",
+				"projects.card3.text": "قارئ مقالات بسيط يدعم الوضع الليلي وحفظ المفضلة.",
+				"blog.title": "تدوينات تجريبية",
+				"blog.intro": "محتوى تجريبي لعرض شكل المدونة قبل ربطها بنظام حقيقي.",
+				"blog.card1.tag": "Flutter Basics",
+				"blog.card1.title": "كيف تبدأ مشروع Flutter نظيف",
+				"blog.card1.text": "خطوات عملية لبناء هيكل مشروع واضح من أول يوم.",
+				"blog.card2.tag": "Performance",
+				"blog.card2.title": "تقنيات تسريع واجهات Flutter",
+				"blog.card2.text": "طرق تقليل إعادة البناء وتحسين سلاسة الرسوم المتحركة.",
+				"blog.card3.tag": "Architecture",
+				"blog.card3.title": "اختيار إدارة الحالة المناسبة",
+				"blog.card3.text": "مقارنة مبسطة بين أشهر الخيارات ومتى تستخدم كل واحد.",
+				"contact.title": "تواصل",
+				"contact.intro": "ضع روابطك الحقيقية هنا قبل النشر النهائي.",
+				"contact.github": "GitHub",
+				"contact.linkedin": "LinkedIn",
+				"contact.email": "Email",
+				"footer.copy": "مدونة بروفايل تجريبية لاختبار النشر المجاني - 2026"
+			},
+			en: {
+				"nav.about": "About",
+				"nav.skills": "Skills",
+				"nav.projects": "Projects",
+				"nav.blog": "Blog",
+				"nav.contact": "Contact",
+				"hero.eyebrow": "Personal Demo Blog",
+				"hero.title": "Hi, I am a Flutter Mobile Developer",
+				"hero.subtitle": "I build fast and scalable mobile apps with Flutter and Dart. This is a full demo website to test deployment on free hosting.",
+				"hero.primary": "Read latest posts",
+				"hero.secondary": "View projects",
+				"stats.apps": "Demo apps",
+				"stats.stack": "Main stack",
+				"stats.roleValue": "mobile devloper",
+				"stats.roleLabel": "Current role",
+				"about.title": "Quick Intro",
+				"about.text": "I share practical notes on Flutter UI, state management, and performance tuning. This website is built as a simple personal profile ready for deployment.",
+				"skills.title": "Core Skills",
+				"skills.intro": "Technologies I use frequently in mobile projects:",
+				"projects.title": "Featured Projects",
+				"projects.intro": "Demo projects that can later evolve into detailed case studies.",
+				"projects.card1.tag": "Productivity App",
+				"projects.card1.title": "Task Bloom",
+				"projects.card1.text": "Task management app with smart reminders and weekly analytics dashboard.",
+				"projects.card2.tag": "Commerce App",
+				"projects.card2.title": "Mini Cart",
+				"projects.card2.text": "Mobile shopping UI with filtering and a simulated checkout experience.",
+				"projects.card3.tag": "Content App",
+				"projects.card3.title": "ReadFlow",
+				"projects.card3.text": "Simple article reader with dark mode and favorites.",
+				"blog.title": "Demo Blog Posts",
+				"blog.intro": "Sample content to show blog layout before connecting to a real CMS.",
+				"blog.card1.tag": "Flutter Basics",
+				"blog.card1.title": "How to start a clean Flutter project",
+				"blog.card1.text": "Practical steps to build a maintainable project structure from day one.",
+				"blog.card2.tag": "Performance",
+				"blog.card2.title": "Techniques to speed up Flutter UIs",
+				"blog.card2.text": "Ways to reduce rebuilds and improve animation smoothness.",
+				"blog.card3.tag": "Architecture",
+				"blog.card3.title": "Choosing the right state management",
+				"blog.card3.text": "A compact comparison and when to choose each approach.",
+				"contact.title": "Contact",
+				"contact.intro": "Replace these placeholders with your real links before final publishing.",
+				"contact.github": "GitHub",
+				"contact.linkedin": "LinkedIn",
+				"contact.email": "Email",
+				"footer.copy": "Demo portfolio blog for free hosting test - 2026"
+			}
+		};
+
+		const html = document.documentElement;
+		const switchBtn = document.getElementById("langSwitch");
+		const translatable = document.querySelectorAll("[data-i18n]");
+
+		function setLanguage(lang) {
+			const direction = lang === "ar" ? "rtl" : "ltr";
+			html.lang = lang;
+			html.dir = direction;
+
+			translatable.forEach((el) => {
+				const key = el.dataset.i18n;
+				if (strings[lang][key]) {
+					el.textContent = strings[lang][key];
+				}
+			});
+
+			switchBtn.textContent = lang === "ar" ? "AR | EN" : "EN | AR";
+			localStorage.setItem("siteLang", lang);
+		}
+
+		switchBtn.addEventListener("click", () => {
+			const next = html.lang === "ar" ? "en" : "ar";
+			setLanguage(next);
+		});
+
+		const savedLang = localStorage.getItem("siteLang");
+		setLanguage(savedLang === "en" ? "en" : "ar");
+	</script>
+</body>
+</html>
